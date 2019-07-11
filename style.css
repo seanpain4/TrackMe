@@ -1,0 +1,9 @@
+body {
+  background-color: lightgray;
+  font: 15px arial, sans-serif;
+  padding-left: 40%;
+}
+
+h1, h3 {
+  text-decoration: underline;
+}
