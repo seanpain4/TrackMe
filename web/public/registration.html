@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" />
+      <meta charset="utf-8" />
+      <meta name="description" content="A frontend dashboard for the TrackMe application"/>
+      <meta name="author" content="Sean Pain"/>
+      <meta name="viewport" content="width=device-width, initialscale=1.0">
+      <title>TrackMe</title>
+  </head>
+  <body>
+    <div class="container">
+      <div id="navbar"></div>
+      <h1>Registration</h1>
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input class="form-control" id="username" placeholder="Username">
+      </div>
+      <div class="form-group">
+        <label for="password1">Password</label>
+        <input type="password" class="form-control" id="password1" placeholder="Password">
+      </div>
+      <div class="form-group">
+        <label for="password2">Confirm Password</label>
+        <input type="password" class="form-control" id="password2" placeholder="Password">
+      </div>
+      <div id="alert"></div>
+      <p>Already have an account? Login <a href="/login">here.</a></p>
+      <button class="btn btn-success" id="register">Register</button>
+      <div id="footer"></div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
