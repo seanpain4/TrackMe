@@ -47,7 +47,35 @@ $('#register').on('click', function() {
   }
 });
 
+$('#login').on('click', function() {
+  const username_in = $('#username').val();
+  const password1 = $('#password1').val();
+  var exists = false;
+
+  for (var i = 0; i < users.length; i++) { 
+    if (users[i].username == username_in && users[i].password == password1) {
+      exists = true;
+    }
+  }
+
+  if (exists) {
+    localStorage.setItem('isAuthenticated', 'true');
+    window.location.href = '/';
+  } else {
+    $('#alert').append(`
+      <div class="alert alert-danger">
+        Username or password is incorrect! Try again.
+      </div>
+    `);
+  }
+});
+
 $('#send-command').on('click', function() {
   const command = $('#command').val();
   console.log(`command is: ${command}`);
 });
+
+const logout = () => {
+  localStorage.removeItem('isAuthenticated');
+  window.location.href = '/login';
+}
