@@ -16,6 +16,12 @@ app.use(function(req, res, next) {
   next();
 });
 
+app.use(express.static(`${__dirname}/public`));
+
+app.get('/docs', (req, res) => {
+  res.sendFile(`${__dirname}/public/generated-docs/index.html`);
+});
+
 app.get('/api/test', (req, res) => {
   res.send('The API is working!');
 });
@@ -23,6 +29,41 @@ app.get('/api/test', (req, res) => {
 app.listen(port, () => {
   console.log(`listening on port ${port}`);
 });
+
+/**
+* @api {get} /api/devices AllDevices An array of all devices
+* @apiGroup Device
+* @apiSuccessExample {json} Success-Response:
+* [
+*   {
+*     "_id": "dsohsdohsdofhsofhosfhsofh",
+*     "name": "Mary's iPhone",
+*     "user": "mary",
+*     "sensorData": [
+*       {
+*         "ts": "1529542230",
+*         "temp": 12,
+*         "loc": {
+*           "lat": -37.84674,
+*           "lon": 145.115113
+*         }
+*       },
+*       {
+*         "ts": "1529572230",
+*         "temp": 17,
+*         "loc": {
+*           "lat": -37.850026,
+*           "lon": 145.117683
+*         }
+*       }
+*     ]
+*   }
+* ]
+* @apiErrorExample {json} Error-Response:
+* {
+*   "User does not exist"
+* }
+*/
 
 app.get('/api/devices', (req, res) => {
   Device.find({}, (err, devices) => {
