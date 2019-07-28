@@ -18,21 +18,39 @@ app.use(function(req, res, next) {
 
 app.use(express.static(`${__dirname}/public`));
 
-app.get('/docs', (req, res) => {
-  res.sendFile(`${__dirname}/public/generated-docs/index.html`);
-});
-
-app.get('/api/test', (req, res) => {
-  res.send('The API is working!');
-});
-
 app.listen(port, () => {
   console.log(`listening on port ${port}`);
 });
 
 /**
+* @api {get} /docs API Docs
+* @apiGroup Docs
+* @apiSuccessExample {object} Success-Response:
+* '/generated-docs/index.html'
+* @apiErrorExample {string} Error-Response:
+* null
+*/
+
+app.get('/docs', (req, res) => {
+  res.sendFile(`${__dirname}/public/generated-docs/index.html`);
+});
+
+/**
+* @api {get} /api/test Test API
+* @apiGroup Test
+* @apiSuccessExample {string} Success-Response:
+* 'The API is working!'
+* @apiErrorExample {string} Error-Response:
+* null
+*/
+
+app.get('/api/test', (req, res) => {
+  res.send('The API is working!');
+});
+
+/**
 * @api {get} /api/devices AllDevices An array of all devices
-* @apiGroup Device
+* @apiGroup Devices
 * @apiSuccessExample {json} Success-Response:
 * [
 *   {
@@ -73,6 +91,15 @@ app.get('/api/devices', (req, res) => {
   });
 });
 
+/**
+* @api {post} /api/devices Add device
+* @apiGroup Devices
+* @apiSuccessExample {string} Success-Response:
+* 'Successfully added device and data.'
+* @apiErrorExample {string} Error-Reponse:
+* 'Syntax error.'
+*/
+
 app.post('/api/devices', (req, res) => {
   const { name, user, sensorData } = req.body;
   const newDevice = new Device({
@@ -83,7 +110,7 @@ app.post('/api/devices', (req, res) => {
   newDevice.save(err => {
     return err
       ? res.send(err)
-      : res.send('successfully added device and data');
+      : res.send('Successfully added device and data.');
   });
 });
 
