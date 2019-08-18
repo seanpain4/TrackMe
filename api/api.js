@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const Device = require('./models/device');
+const User = require('./models/user');
 
 mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true });
 
@@ -112,6 +113,11 @@ app.post('/api/devices', (req, res) => {
       ? res.send(err)
       : res.send('Successfully added device and data.');
   });
+});
+
+app.post('/api/authenticate', (req, res) => {
+  const { user, password } = req.body;
+  res.send(user);
 });
 
 app.post('/api/send-command', (req, res) => {
