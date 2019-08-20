@@ -92,6 +92,16 @@ app.get('/api/devices', (req, res) => {
   });
 });
 
+app.get('/api/devices/:deviceId/device-history', (req, res) => {
+  const { deviceId } = req.params;
+  Device.findOne({"_id": deviceId}, (err, devices) => {
+    const { sensorData } = devices;
+    return err
+      ? res.send(err)
+      : res.send(sensorData);
+  });
+});
+
 /**
 * @api {post} /api/devices Add device
 * @apiGroup Devices
@@ -116,8 +126,48 @@ app.post('/api/devices', (req, res) => {
 });
 
 app.post('/api/authenticate', (req, res) => {
-  const { user, password } = req.body;
-  res.send(user);
+  const { name, password } = req.body;
+  User.findOne({"name":name}, (err, users) => {
+    if (err) {
+      return res.send(err);
+    } else if (!users) {
+      return res.send("No user found!");
+    } else if (users.password != password) {
+      return res.send("Password incorrect!");
+    } else {
+      return res.json({
+        success: true,
+        message: 'Authenticated Successfully!',
+        isAdmin: users.isAdmin
+      });
+    }
+  });
+});
+
+app.post('/api/registration', (req, res) => {
+  const { name, password, isAdmin } = req.body;
+  User.findOne({"name":name}, (err, users) => {
+    if (err) {
+      return res.send(err);
+    } else if (users) {
+      return res.send("This user already exists!")
+    } else {
+      const newUser = new User({
+        name,
+        password,
+        isAdmin
+      });
+
+      newUser.save(err => {
+        return err
+          ? res.send(err)
+          : res.json({
+            success: true,
+            message: 'Created new user'
+          });
+      });
+    }
+  });
 });
 
 app.post('/api/send-command', (req, res) => {

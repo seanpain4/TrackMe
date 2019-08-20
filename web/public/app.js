@@ -65,27 +65,19 @@ $('#register').on('click', function() {
   }
 });
 
-$('#login').on('click', function() {
-  const username_in = $('#username').val();
-  const password1 = $('#password1').val();
-  var exists = false;
-
-  for (var i = 0; i < users.length; i++) { 
-    if (users[i].username == username_in && users[i].password == password1) {
-      exists = true;
+$('#login').on('click', () => {
+  const user = $('#username').val();
+  const password = $('#password1').val();
+  $.post(`${API_URL}/authenticate`, { user, password })
+  .then((response) =>{
+    if (response.success) {
+      localStorage.setItem('user', user);
+      localStorage.setItem('isAdmin', response.isAdmin);
+      location.href = '/';
+    } else {
+      $('#alert').append(`<p class="alert alert-danger">${response}</p>`);
     }
-  }
-
-  if (exists) {
-    localStorage.setItem('isAuthenticated', 'true');
-    window.location.href = '/';
-  } else {
-    $('#alert').append(`
-      <div class="alert alert-danger">
-        Username or password is incorrect! Try again.
-      </div>
-    `);
-  }
+  });
 });
 
 $('#send-command').on('click', function() {
