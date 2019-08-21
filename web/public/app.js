@@ -2,22 +2,46 @@ $('#navbar').load('navbar.html');
 $('#footer').load('footer.html');
 
 const API_URL = 'http://localhost:5000/api';
-const users = JSON.parse(localStorage.getItem('users')) || [];
+const currentUser = localStorage.getItem('name');
 
-$.get(`${API_URL}/devices`)
-.then(response => {
-  response.forEach(device => {
-    $('#devices tbody').append(`
-      <tr>
-        <td>${device.user}</td>
-        <td>${device.name}</td>
-      </tr>`
-    );
+if (currentUser) {
+  $.get(`${API_URL}/users/${currentUser}/devices`)
+  .then(response => {
+    response.forEach((device) => {
+      $('#devices tbody').append(`
+        <tr data-device-id=${device._id}>
+          <td>${device.user}</td>
+          <td>${device.name}</td>
+        </tr>`
+      );
+    });
+    $('#devices tbody tr').on('click', (e) => {
+      const deviceId = e.currentTarget.getAttribute('data-device-id');
+      $.get(`${API_URL}/devices/${deviceId}/device-history`)
+      .then(response => {
+        response.map(sensorData => {
+          $('#historyContent').append(`
+            <tr>
+              <td>${sensorData.ts}</td>
+              <td>${sensorData.temp}</td>
+              <td>${sensorData.loc.lat}</td>
+              <td>${sensorData.loc.lon}</td>
+            </tr>
+          `);
+        });
+        $('#historyModal').modal('show');
+      });
+    });
+  })
+  .catch(error => {
+    console.error(`Error: ${error}`);
   });
-})
-.catch(error => {
-  console.error(`Error: ${error}`);
-});
+} else {
+  const path = window.location.pathname;
+  if (path !== '/login') {
+    location.href = '/login';
+  }
+}
 
 $('#add-device').on('click', () => {
   const name = $('#name').val();
@@ -43,35 +67,27 @@ $('#register').on('click', function() {
   const username_in = $('#username').val();
   const password1 = $('#password1').val();
   const password2 = $('#password2').val();
-  const exists = users.find(users => users.username === username_in);
-  if (exists == undefined) {
-    if (password1 == password2) {
-      users.push({ username: username_in, password: password1 });
-      localStorage.setItem('users', JSON.stringify(users));
-      window.location.href = '/login';
-    } else {
-      $('#alert').append(`
-      <div class="alert alert-danger">
-        Passwords do not match! Try again.
-      </div>
-    `);
-    }
+  if (password1 != password2) {
+    $('#alert').append(`<p class="alert alert-danger">Passwords do not match!</p>`);
   } else {
-    $('#alert').append(`
-      <div class="alert alert-danger">
-        Users already exists! Please login.
-      </div>
-    `);
+    $.post(`${API_URL}/registration`, { "name": username_in, "password": password1 })
+    .then((response) => {
+      if (response.success) {
+        location.href = '/login';
+      } else {
+        $('#alert').append(`<p class="alert alert-danger">${response}</p>`); 
+      }
+    });
   }
 });
 
 $('#login').on('click', () => {
   const user = $('#username').val();
   const password = $('#password1').val();
-  $.post(`${API_URL}/authenticate`, { user, password })
+  $.post(`${API_URL}/authenticate`, { "name": user, "password": password })
   .then((response) =>{
     if (response.success) {
-      localStorage.setItem('user', user);
+      localStorage.setItem('name', user);
       localStorage.setItem('isAdmin', response.isAdmin);
       location.href = '/';
     } else {
@@ -86,6 +102,7 @@ $('#send-command').on('click', function() {
 });
 
 const logout = () => {
-  localStorage.removeItem('isAuthenticated');
+  localStorage.removeItem('name');
+  localStorage.removeItem('isAdmin');
   window.location.href = '/login';
 }
