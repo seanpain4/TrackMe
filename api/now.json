@@ -1,0 +1,59 @@
+{
+	"version": 2,
+	"builds": [
+		{ "src": "api.js", "use": "@now/node" },
+		{ "src": "public/generated-docs/**", "use": "@now/static" }
+	],
+    "alias": "218137385-sit-209",
+    "name": "218137385-sit-209",
+	"routes": [
+	  {
+		"src": "/docs",
+		"dest": "api.js",
+		"methods": ["GET"]
+    },
+    {
+      "src": "api/test",
+      "dest": "api.js",
+      "methods": ["GET"]
+      },
+	  {
+		"src": "/api/devices/([^/]+)/device-history",
+		"dest": "api.js",
+		"methods": ["GET"]
+	  },
+	  {
+		"src": "/api/users/([^/]+)/devices",
+		"dest": "api.js",
+		"methods": ["GET"]
+	  },
+	  {
+		"src": "/api/send-command",
+		"dest": "api.js",
+		"methods": ["POST"]
+	  },
+	  {
+		"src": "/api/authenticate",
+		"dest": "api.js",
+		"methods": ["POST"]
+	  },
+	  {
+		"src": "/api/registration",
+		"dest": "api.js",
+		"methods": ["POST"]
+	  },
+	  {
+		"src": "/api/devices",
+		"dest": "api.js",
+		"methods": ["POST", "GET"]
+	  },
+	  {
+		"src": "/(.*)",
+		"dest": "public/generated-docs/$1"
+	  }
+	],
+	"env": {
+		"MONGO_URL": "mongodb+srv://dbTrackMeUser:dbTr4ckM3!@sit209-g3sin.mongodb.net/prod"
+	}
+}
+

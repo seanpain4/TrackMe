@@ -1,7 +1,7 @@
 $('#navbar').load('navbar.html');
 $('#footer').load('footer.html');
 
-const API_URL = 'http://localhost:5000/api';
+const API_URL = 'https://218137385-sit-209.now.sh/api';
 const currentUser = localStorage.getItem('name');
 
 if (currentUser) {

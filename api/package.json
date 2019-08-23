@@ -6,7 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon -r dotenv/config api.js",
-    "doc": "apidoc -o public/generated-docs/ -e node_modules/"
+    "doc": "apidoc -o public/generated-docs/ -e node_modules/",
+    "build": "npm help",
+    "deploy": "now remove 218137385-sit-209.now.sh -y && now -p && now alias"
   },
   "author": "",
   "license": "ISC",
@@ -18,6 +20,7 @@
   },
   "devDependencies": {
     "apidoc": "^0.17.7",
-    "nodemon": "^1.19.1"
+    "nodemon": "^1.19.1",
+    "now": "^16.1.2"
   }
 }
