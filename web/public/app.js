@@ -2,6 +2,7 @@ $('#navbar').load('navbar.html');
 $('#footer').load('footer.html');
 
 const API_URL = 'https://218137385-sit-209.now.sh/api';
+const MQTT_URL = 'http://localhost:5001';
 const currentUser = localStorage.getItem('name');
 
 if (currentUser) {
@@ -85,7 +86,7 @@ $('#login').on('click', () => {
   const user = $('#username').val();
   const password = $('#password1').val();
   $.post(`${API_URL}/authenticate`, { "name": user, "password": password })
-  .then((response) =>{
+  .then((response) => {
     if (response.success) {
       localStorage.setItem('name', user);
       localStorage.setItem('isAdmin', response.isAdmin);
@@ -97,8 +98,9 @@ $('#login').on('click', () => {
 });
 
 $('#send-command').on('click', function() {
+  const deviceid = $('#deviceid').val();
   const command = $('#command').val();
-  console.log(`command is: ${command}`);
+  $.post(`${MQTT_URL}/send-command`, { "deviceId": deviceid, "command": command })
 });
 
 const logout = () => {
