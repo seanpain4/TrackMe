@@ -11,7 +11,7 @@
   "author": "Sean Pain",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.18.2"
   },
   "devDependencies": {
     "heroku": "^7.29.0",
